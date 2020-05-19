@@ -1,6 +1,7 @@
 package com.developer.firebase_project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -22,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -184,18 +187,28 @@ public class Main2Activity extends AppCompatActivity {
 
 
         /////----------??????below command is to retrieve data from firestore data----------
-        FirebaseFirestore.getInstance().collection("Cities").whereEqualTo("capital",true)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    for(QueryDocumentSnapshot doc:task.getResult())
-                    {
-                        Log.i("Document",doc.getId()+ " : " + doc.getData());
+//        FirebaseFirestore.getInstance().collection("Cities").whereEqualTo("capital",true)
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful())
+//                {
+//                    for(QueryDocumentSnapshot doc:task.getResult())
+//                    {
+//                        Log.i("Document",doc.getId()+ " : " + doc.getData());
+//                    }
+//                }
+//            }
+//        });
+
+
+        /////----------??????below command is to retrieve realtime data from particular document of firestore data----------
+        FirebaseFirestore.getInstance().collection("Cities").document("JRS")
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        ////type code here
                     }
-                }
-            }
-        });
+                });
     }
 }
