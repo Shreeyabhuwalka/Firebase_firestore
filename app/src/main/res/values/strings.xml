@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Firebase_project</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? REGISTER</string>
+    <string name="email">Email</string>
+    <string name="app_logo">App Logo</string>
+    <string name="register">Register</string>
+    <string name="female">Female</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string name="male">Male</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <string name="username">Username</string>
+    <string name="full_name">Full Name</string>
+</resources>
