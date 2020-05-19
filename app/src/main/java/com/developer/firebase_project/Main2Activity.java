@@ -11,22 +11,26 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Main2Activity extends AppCompatActivity {
-    private Button logout;
-    private Button add;
+     Button add;
     private EditText input;
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,8 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         add = (Button) findViewById(R.id.add);
         input = (EditText) findViewById(R.id.editText);
-        logout = (Button) findViewById(R.id.log_out);
-        listView = (ListView) findViewById(R.id.lists);
+        Button logout = (Button) findViewById(R.id.log_out);
+        ListView listView = (ListView) findViewById(R.id.lists);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +74,7 @@ public class Main2Activity extends AppCompatActivity {
             }
         });
         final ArrayList<String> list = new ArrayList<>();
-        final ArrayAdapter adapter = new ArrayAdapter(this,R.layout.list_item,list);
+        final ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.list_item,list);
         listView.setAdapter(adapter);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("information");
         reference.addValueEventListener(new ValueEventListener() {
@@ -80,7 +84,12 @@ public class Main2Activity extends AppCompatActivity {
                 for(DataSnapshot snapshot:dataSnapshot.getChildren())
                 {
                     information info = snapshot.getValue(information.class);
-                    String txt = info.getName() + " : " + info.getEmail();
+                    String txt = null;
+                    if (info != null) {
+                        txt = info.getName() + " : " + info.getEmail();
+                    }
+                    else
+                        txt = "empty";
 //                     list.add(snapshot.getValue().toString());
                     list.add(txt);
                 }
@@ -92,8 +101,62 @@ public class Main2Activity extends AppCompatActivity {
 
             }
         });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //--------------??????below command is to add data in cloud firestore-------------
+
+//        Map<String,Object> city =new HashMap<>();
+//        city.put("name","Varanasi");
+//        city.put("State","UP");
+//        city.put("Country","India");
+//        db.collection("Cities").document("JRS").set(city).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//           if(task.isSuccessful())
+//           {
+//               Toast.makeText(Main2Activity.this, "Value Added", Toast.LENGTH_SHORT).show();
+//           }
+//        }
+//        });
 
 
+        /////----------??????below command is to merge data to firestore data----------
+
+//        Map<String,Object> data = new HashMap<>();
+//        data.put("capital",false);
+//        db.collection("Cities").document("JRS").set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//           if(task.isSuccessful())
+//           {
+//               Toast.makeText(Main2Activity.this, "Merge Successful", Toast.LENGTH_SHORT).show();
+//           }
+//        }
+//        });
+
+
+
+        /////----------??????below command is to add data with ***unique id*** in firestore data----------
+//        Map<String,Object> data = new HashMap<>();
+//        data.put("Name","Tokyo");
+//        data.put("Capital","Japan");
+//        db.collection("Cities").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentReference> task) {
+//                if(task.isSuccessful())
+//           {
+//               Toast.makeText(Main2Activity.this, "Merge Successful", Toast.LENGTH_SHORT).show();
+//           }
+//            }
+//        });
+
+
+        /////----------??????below command is to update existing data in firestore data----------
+        DocumentReference ref = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
+        ref.update("capital",true);
+
+
+        /////----------??????below command is to retrieve data from firestore data----------
 
     }
 }
