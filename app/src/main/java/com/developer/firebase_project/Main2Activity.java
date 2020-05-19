@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -38,7 +40,7 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         add = (Button) findViewById(R.id.add);
         input = (EditText) findViewById(R.id.editText);
-        Button logout = (Button) findViewById(R.id.log_out);
+        final Button logout = (Button) findViewById(R.id.log_out);
         ListView listView = (ListView) findViewById(R.id.lists);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,11 +154,30 @@ public class Main2Activity extends AppCompatActivity {
 
 
         /////----------??????below command is to update existing data in firestore data----------
-        DocumentReference ref = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
-        ref.update("capital",true);
+//        DocumentReference ref = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
+//        ref.update("capital",true);
 
 
         /////----------??????below command is to retrieve data from firestore data----------
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful())
+                    {
+                        DocumentSnapshot doc = task.getResult();
+                        if(doc.exists())
+                        {
+                            Log.i("Document", doc.getData().toString());
+                        }
+                        else
+                        {
+                            Log.i("Document","No Data");
+                        }
+                    }
+                }
+
+        });
 
     }
 }
