@@ -1,29 +1,30 @@
 package com.developer.firebase_project;
 
 public class information {
-   String email;
-   String name;
+    //---imp---name of variable should match with name in firebase
+   String Email;
+   String Name;
     public information() {
     }
 
     public information(String email, String name) {
-        this.email = email;
-        this.name = name;
+        this.Email = email;
+        this.Name = name;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.Email = email;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 }

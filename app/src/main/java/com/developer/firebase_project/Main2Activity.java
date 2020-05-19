@@ -72,14 +72,17 @@ public class Main2Activity extends AppCompatActivity {
         final ArrayList<String> list = new ArrayList<>();
         final ArrayAdapter adapter = new ArrayAdapter(this,R.layout.list_item,list);
         listView.setAdapter(adapter);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("language");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("information");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
                 for(DataSnapshot snapshot:dataSnapshot.getChildren())
                 {
-                    list.add(snapshot.getValue().toString());
+                    information info = snapshot.getValue(information.class);
+                    String txt = info.getName() + " : " + info.getEmail();
+//                     list.add(snapshot.getValue().toString());
+                    list.add(txt);
                 }
                 adapter.notifyDataSetChanged();
             }
