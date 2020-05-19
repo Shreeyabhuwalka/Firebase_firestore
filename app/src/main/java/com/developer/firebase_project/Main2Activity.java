@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.lang.reflect.Array;
@@ -159,25 +161,41 @@ public class Main2Activity extends AppCompatActivity {
 
 
         /////----------??????below command is to retrieve data from firestore data----------
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+//        DocumentReference docRef = FirebaseFirestore.getInstance().collection("Cities").document("JRS");
+//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if(task.isSuccessful())
+//                    {
+//                        DocumentSnapshot doc = task.getResult();
+//                        if(doc.exists())
+//                        {
+//                            Log.i("Document", doc.getData().toString());
+//                        }
+//                        else
+//                        {
+//                            Log.i("Document","No Data");
+//                        }
+//                    }
+//                }
+//
+//        });
+
+
+        /////----------??????below command is to retrieve data from firestore data----------
+        FirebaseFirestore.getInstance().collection("Cities").whereEqualTo("capital",true)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful())
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot doc:task.getResult())
                     {
-                        DocumentSnapshot doc = task.getResult();
-                        if(doc.exists())
-                        {
-                            Log.i("Document", doc.getData().toString());
-                        }
-                        else
-                        {
-                            Log.i("Document","No Data");
-                        }
+                        Log.i("Document",doc.getId()+ " : " + doc.getData());
                     }
                 }
-
+            }
         });
-
     }
 }
